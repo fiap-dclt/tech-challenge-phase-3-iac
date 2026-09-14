@@ -6,14 +6,14 @@ variable "queue_name" {
   type = string
 }
 
-variable "secret_name" {
-  type = string
-}
+# variable "secret_name" {
+#   type = string
+# }
 
-variable "secret_value" {
-  type      = string
-  sensitive = true
-}
+# variable "secret_value" {
+#   type      = string
+#   sensitive = true
+# }
 
 variable "microservice" {
   type = string
@@ -49,11 +49,6 @@ variable "db_engine_version" {
 
 variable "db_user" {
   type = string
-}
-
-variable "db_pass" {
-  type      = string
-  sensitive = true
 }
 
 variable "table_name" {

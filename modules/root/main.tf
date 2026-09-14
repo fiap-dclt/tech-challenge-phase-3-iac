@@ -15,13 +15,13 @@ module "sqs" {
   project    = var.project
 }
 
-module "secrets" {
-  source       = "../secrets"
-  env          = var.env
-  secret_name  = var.secret_name
-  secret_value = var.secret_value
-  project      = var.project
-}
+# module "secrets" {
+#   source       = "../secrets"
+#   env          = var.env
+#   secret_name  = var.secret_name
+#   secret_value = var.secret_value
+#   project      = var.project
+# }
 
 module "dynamodb" {
   source     = "../dynamodb"
@@ -51,7 +51,6 @@ module "rds_auth" {
   db_engine              = var.db_engine
   db_engine_version      = var.db_engine_version
   db_user                = var.db_user
-  db_pass                = var.db_pass
 }
 
 module "rds_flag" {
@@ -65,7 +64,6 @@ module "rds_flag" {
   db_engine              = var.db_engine
   db_engine_version      = var.db_engine_version
   db_user                = var.db_user
-  db_pass                = var.db_pass
 }
 
 module "rds_targeting" {
@@ -79,7 +77,6 @@ module "rds_targeting" {
   db_engine              = var.db_engine
   db_engine_version      = var.db_engine_version
   db_user                = var.db_user
-  db_pass                = var.db_pass
 }
 
 module "redis" {
@@ -99,6 +96,11 @@ module "irsa" {
   dynamodb_table_arn = module.dynamodb.table_arn
   sqs_queue_arn      = module.sqs.queue_arn
   project            = var.project
+  rds_secret_arns = [
+    module.rds_auth.db_secret_arn,
+    module.rds_flag.db_secret_arn,
+    module.rds_targeting.db_secret_arn
+  ]
 }
 
 module "ecr" {

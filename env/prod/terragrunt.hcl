@@ -42,7 +42,7 @@ inputs = {
   microservice = "evaluation-service"
   
   # Secrets Manager
-  secret_name = "db-passwords"
+  # secret_name = "db-passwords"
 
   # ECR
   repository_names = [

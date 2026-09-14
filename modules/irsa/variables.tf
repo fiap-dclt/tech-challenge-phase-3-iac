@@ -17,3 +17,7 @@ variable "sqs_queue_arn" {
 variable "project" {
   type = string
 }
+
+variable "rds_secret_arns" {
+  type = list(string)
+}

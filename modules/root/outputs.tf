@@ -6,9 +6,9 @@ output "sqs_queue_arn" {
   value = module.sqs.queue_arn
 }
 
-output "secrets_arn" {
-  value = module.secrets.secret_arn
-}
+# output "secrets_arn" {
+#   value = module.secrets.secret_arn
+# }
 
 output "vpc_id" {
   value = module.vpc.vpc_id

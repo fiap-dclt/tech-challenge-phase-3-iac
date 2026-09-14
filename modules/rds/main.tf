@@ -28,6 +28,21 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
+resource "random_password" "db_pass" {
+  length           = 20
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "aws_secretsmanager_secret" "db_secret" {
+  name = "rds-${var.env}-${var.microservice}-secret"
+}
+
+resource "aws_secretsmanager_secret_version" "db_secret_version" {
+  secret_id     = aws_secretsmanager_secret.db_secret.id
+  secret_string = random_password.db_pass.result
+}
+
 resource "aws_db_instance" "postgres" {
   identifier             = "rds-${var.env}-${var.microservice}"
   engine                 = var.db_engine
@@ -35,7 +50,7 @@ resource "aws_db_instance" "postgres" {
   instance_class         = "db.t3.small"
   allocated_storage      = 20
   username               = var.db_user
-  password               = var.db_pass
+  password               = random_password.db_pass.result
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   skip_final_snapshot    = true

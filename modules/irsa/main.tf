@@ -29,9 +29,9 @@ module "irsa_analytics" {
 
   oidc_providers = {
     main = {
-      provider_arn = var.oidc_provider_arn
+      provider_arn = var.eks_oidc_provider_arn
       # Formato: ["namespace:nome-da-service-account"]
-      namespace_service_accounts = ["default:analytics-sa"]
+      namespace_service_accounts = ["default:analytics-service-account"]
     }
   }
 
@@ -42,7 +42,7 @@ module "irsa_analytics" {
 
 resource "aws_iam_policy" "external_secrets_policy" {
   name        = "irsa-policy-external-secrets-${var.env}"
-  description = "Permissoes para o External Secrets ler senhas do RDS"
+  description = "Permissoes para o External Secrets ler senhas do RDS e descriptografar com KMS"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -54,6 +54,14 @@ resource "aws_iam_policy" "external_secrets_policy" {
           "secretsmanager:DescribeSecret"
         ]
         Resource = var.rds_secret_arns
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ]
+        Resource = var.kms_key_arn
       }
     ]
   })
@@ -70,7 +78,7 @@ module "irsa_external_secrets" {
 
   oidc_providers = {
     main = {
-      provider_arn               = var.oidc_provider_arn
+      provider_arn               = var.eks_oidc_provider_arn
       namespace_service_accounts = ["external-secrets:external-secrets"]
     }
   }
@@ -78,4 +86,51 @@ module "irsa_external_secrets" {
   policies = {
     secrets = aws_iam_policy.external_secrets_policy.arn
   }
+}
+
+resource "aws_iam_role" "github_actions" {
+  name = "github-actions-terragrunt-role-${var.env}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = var.github_oidc_provider_arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            # Restricts role assumption strictly to your GitHub repository
+            "token.actions.githubusercontent.com:sub" = "repo:fiap-dclt/tech-challenge-phase-3-iac:*"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "github_kms_decrypt" {
+  name        = "github-actions-kms-decrypt-${var.env}"
+  description = "Allows GitHub Actions runner to decrypt SOPS secrets using KMS"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt", "kms:DescribeKey"]
+        Resource = var.kms_key_arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_kms_attach" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.github_kms_decrypt.arn
 }

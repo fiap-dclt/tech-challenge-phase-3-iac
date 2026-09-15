@@ -2,7 +2,7 @@ variable "env" {
   type = string
 }
 
-variable "oidc_provider_arn" {
+variable "eks_oidc_provider_arn" {
   type = string
 }
 
@@ -20,4 +20,13 @@ variable "project" {
 
 variable "rds_secret_arns" {
   type = list(string)
+}
+
+variable "kms_key_arn" {
+  type = string
+}
+
+variable "github_oidc_provider_arn" {
+  type    = string
+  default = "arn:aws:kms:us-east-1:640494160208:key/f6aeb90f-f501-4286-82f9-0e2df0cd7ca8"
 }

@@ -10,3 +10,6 @@
 # Terragrunt cache directories
 .terragrunt-cache/
 **/.terragrunt-cache/
+
+# Sensitive files that may contain secrets or credentials
+secrets.yaml

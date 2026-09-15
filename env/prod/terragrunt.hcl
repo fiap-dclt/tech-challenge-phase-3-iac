@@ -4,9 +4,9 @@ include "root" {
 
 locals {
   env_vars = read_terragrunt_config("${get_terragrunt_dir()}/env.hcl", { locals = { env = "prod" } })
-
-  # Extrai a variável env
   env = local.env_vars.locals.env
+
+  secret_vars = yamldecode(sops_decrypt_file("${get_terragrunt_dir()}/secrets.enc.yaml"))
 }
 
 terraform {
@@ -42,7 +42,8 @@ inputs = {
   microservice = "evaluation-service"
   
   # Secrets Manager
-  # secret_name = "db-passwords"
+  secret_name = "toggle-master/prod/master_key"
+  secret_value = local.secret_vars.MASTER_KEY
 
   # ECR
   repository_names = [

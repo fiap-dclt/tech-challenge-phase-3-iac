@@ -6,14 +6,14 @@ variable "queue_name" {
   type = string
 }
 
-# variable "secret_name" {
-#   type = string
-# }
+variable "secret_name" {
+  type = string
+}
 
-# variable "secret_value" {
-#   type      = string
-#   sensitive = true
-# }
+variable "secret_value" {
+  type      = string
+  sensitive = true
+}
 
 variable "microservice" {
   type = string
@@ -65,4 +65,9 @@ variable "kubernetes_version" {
 
 variable "repository_names" {
   type = list(string)
+}
+
+variable "kms_key_arn" {
+  type    = string
+  default = "arn:aws:kms:us-east-1:640494160208:key/f6aeb90f-f501-4286-82f9-0e2df0cd7ca8"
 }

@@ -15,13 +15,19 @@ module "sqs" {
   project    = var.project
 }
 
-# module "secrets" {
-#   source       = "../secrets"
-#   env          = var.env
-#   secret_name  = var.secret_name
-#   secret_value = var.secret_value
-#   project      = var.project
-# }
+module "oidc" {
+  source  = "../oidc"
+  env     = var.env
+  project = var.project
+}
+
+module "secrets" {
+  source       = "../secrets"
+  env          = var.env
+  secret_name  = var.secret_name
+  secret_value = var.secret_value
+  project      = var.project
+}
 
 module "dynamodb" {
   source     = "../dynamodb"
@@ -90,17 +96,19 @@ module "redis" {
 }
 
 module "irsa" {
-  source             = "../irsa"
-  env                = var.env
-  oidc_provider_arn  = module.eks.oidc_provider_arn
-  dynamodb_table_arn = module.dynamodb.table_arn
-  sqs_queue_arn      = module.sqs.queue_arn
-  project            = var.project
+  source                = "../irsa"
+  env                   = var.env
+  eks_oidc_provider_arn = module.eks.eks_oidc_provider_arn
+  dynamodb_table_arn    = module.dynamodb.table_arn
+  sqs_queue_arn         = module.sqs.queue_arn
+  project               = var.project
   rds_secret_arns = [
     module.rds_auth.db_secret_arn,
     module.rds_flag.db_secret_arn,
     module.rds_targeting.db_secret_arn
   ]
+  kms_key_arn              = var.kms_key_arn
+  github_oidc_provider_arn = module.oidc.github_oidc_provider_arn
 }
 
 module "ecr" {

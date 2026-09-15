@@ -3,6 +3,8 @@ module "ecr" {
 
   for_each = toset(var.repository_names)
 
+  repository_name = each.value
+
   repository_read_write_access_arns = ["arn:aws:iam::012345678901:role/terraform"]
   repository_lifecycle_policy = jsonencode({
     rules = [

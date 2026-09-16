@@ -8,6 +8,11 @@ module "eks" {
 
   enable_cluster_creator_admin_permissions = true
 
+  compute_config = {
+    enabled    = true
+    node_pools = ["general-purpose"]
+  }
+
   eks_managed_node_groups = {
     default = {
       desired_size   = 2

@@ -24,7 +24,7 @@ inputs = {
   azs             = ["us-east-1a", "us-east-1b"]
   
   # EKS
-  kubernetes_version = "1.35"
+  kubernetes_version = "1.36"
   
   # RDS
   db_engine         = "postgres"

@@ -13,6 +13,19 @@ module "eks" {
     node_pools = ["general-purpose"]
   }
 
+  addons = {
+    coredns = {
+      most_recent = true
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    vpc-cni = {
+      most_recent    = true
+      before_compute = true
+    }
+  }
+
   eks_managed_node_groups = {
     default = {
       desired_size   = 2
@@ -21,9 +34,10 @@ module "eks" {
       instance_types = ["t3.small"]
 
       iam_role_additional_policies = {
-        amazon_eks_worker_node_policy = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-        amazon_eks_cni_policy         = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-        amazon_ecr_read_only          = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        amazon_eks_worker_node_policy    = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+        amazon_eks_cni_policy            = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+        amazon_ecr_read_only             = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        amazon_ssm_managed_instance_core = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       }
     }
   }

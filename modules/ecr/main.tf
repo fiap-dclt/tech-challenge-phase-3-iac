@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 module "ecr" {
   source = "terraform-aws-modules/ecr/aws"
 
@@ -5,7 +7,6 @@ module "ecr" {
 
   repository_name = each.value
 
-  repository_read_write_access_arns = ["arn:aws:iam::012345678901:role/terraform"]
   repository_lifecycle_policy = jsonencode({
     rules = [
       {

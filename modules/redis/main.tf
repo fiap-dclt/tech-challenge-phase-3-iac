@@ -1,5 +1,5 @@
 resource "aws_elasticache_subnet_group" "this" {
-  name       = "subnet-group-redis-${var.env}"
+  name       = "subnet-group-redis-${var.env}-${var.microservice}"
   subnet_ids = var.private_subnet_ids
   tags = {
     Name = "subnet-group-redis-${var.env}-${var.microservice}"
@@ -41,4 +41,10 @@ resource "aws_elasticache_cluster" "redis" {
   tags = {
     Name = "redis-${var.env}-${var.microservice}"
   }
+}
+
+resource "aws_ssm_parameter" "redis_url" {
+  name  = "/${var.project}/${var.env}/${var.microservice}/REDIS_URL"
+  type  = "String"
+  value = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.port}"
 }

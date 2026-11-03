@@ -39,8 +39,11 @@ resource "aws_secretsmanager_secret" "db_secret" {
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_version" {
-  secret_id     = aws_secretsmanager_secret.db_secret.id
-  secret_string = random_password.db_pass.result
+  secret_id = aws_secretsmanager_secret.db_secret.id
+  secret_string = jsonencode({
+    username = var.db_user
+    password = random_password.db_pass.result
+  })
 }
 
 resource "aws_db_instance" "postgres" {
@@ -58,4 +61,10 @@ resource "aws_db_instance" "postgres" {
   tags = {
     Name = "rds-${var.env}-${var.microservice}"
   }
+}
+
+resource "aws_ssm_parameter" "db_url" {
+  name  = "/${var.project}/${var.env}/${var.microservice}/DATABASE_URL"
+  type  = "String"
+  value = "${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}"
 }

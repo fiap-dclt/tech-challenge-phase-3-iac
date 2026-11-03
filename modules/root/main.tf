@@ -107,6 +107,14 @@ module "irsa" {
     module.rds_flag.db_secret_arn,
     module.rds_targeting.db_secret_arn
   ]
+  ssm_parameter_arns = [
+    module.rds_auth.db_url_ssm_arn,
+    module.rds_flag.db_url_ssm_arn,
+    module.rds_targeting.db_url_ssm_arn,
+    module.redis.redis_url_ssm_arn,
+    module.sqs.sqs_url_ssm_arn,
+    module.dynamodb.dynamodb_table_ssm_arn
+  ]
   kms_key_arn              = var.kms_key_arn
   github_oidc_provider_arn = module.oidc.github_oidc_provider_arn
 }

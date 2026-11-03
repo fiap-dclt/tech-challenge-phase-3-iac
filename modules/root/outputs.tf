@@ -26,8 +26,8 @@ output "rds_targeting_endpoint" {
   value = module.rds_targeting.rds_endpoint
 }
 
-output "redis_endpoint" {
-  value = module.redis.redis_endpoint
+output "redis_url" {
+  value = module.redis.redis_url
 }
 
 output "dynamodb_table_name" {

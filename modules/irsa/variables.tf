@@ -22,6 +22,10 @@ variable "rds_secret_arns" {
   type = list(string)
 }
 
+variable "ssm_parameter_arns" {
+  type = list(string)
+}
+
 variable "kms_key_arn" {
   type = string
 }

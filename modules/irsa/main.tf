@@ -58,6 +58,14 @@ resource "aws_iam_policy" "external_secrets_policy" {
       {
         Effect = "Allow"
         Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters"
+        ]
+        Resource = var.ssm_parameter_arns
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "kms:Decrypt",
           "kms:DescribeKey"
         ]

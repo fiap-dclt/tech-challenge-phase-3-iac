@@ -5,8 +5,8 @@ resource "helm_release" "argocd" {
   namespace        = "argocd"
   create_namespace = true
   version          = "5.51.6" # Versão estável recomendada
-  set = [{
+  set {
     name  = "server.insecure"
     value = "true"
-  }]
+  }
 }

@@ -5,8 +5,8 @@ resource "helm_release" "external_secrets" {
   namespace        = "external-secrets"
   create_namespace = true
   version          = "0.9.11"
-  set = [{
+  set {
     name  = "installCRDs"
     value = "true"
-  }]
+  }
 }

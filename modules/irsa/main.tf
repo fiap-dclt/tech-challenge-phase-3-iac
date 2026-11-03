@@ -31,7 +31,7 @@ module "irsa_analytics" {
     main = {
       provider_arn = var.eks_oidc_provider_arn
       # Formato: ["namespace:nome-da-service-account"]
-      namespace_service_accounts = ["default:analytics-service-account"]
+      namespace_service_accounts = ["analytics:analytics-service-account"]
     }
   }
 

@@ -9,10 +9,11 @@ module "vpc" {
 }
 
 module "sqs" {
-  source     = "../sqs"
-  env        = var.env
-  queue_name = var.queue_name
-  project    = var.project
+  source       = "../sqs"
+  env          = var.env
+  queue_name   = var.queue_name
+  project      = var.project
+  microservice = var.microservice
 }
 
 module "oidc" {
@@ -44,6 +45,14 @@ module "eks" {
   vpc_id             = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnet_ids
   project            = var.project
+}
+
+module "eso" {
+  source = "../eso"
+}
+
+module "argocd" {
+  source = "../argocd"
 }
 
 module "rds_auth" {

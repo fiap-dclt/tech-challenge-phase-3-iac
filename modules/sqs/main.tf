@@ -7,7 +7,7 @@ resource "aws_sqs_queue" "this" {
 }
 
 resource "aws_ssm_parameter" "sqs_url" {
-  name  = "/${var.microservice}/${var.env}/sqs/AWS_SQS_URL"
+  name  = "/${var.queue_name}/${var.env}/sqs/AWS_SQS_URL"
   type  = "String"
   value = aws_sqs_queue.this.url
 }

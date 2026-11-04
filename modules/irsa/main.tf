@@ -142,3 +142,34 @@ resource "aws_iam_role_policy_attachment" "github_kms_attach" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_kms_decrypt.arn
 }
+
+resource "aws_iam_role" "github_actions_ecr" {
+  name = "github-actions-ecr-role-${var.env}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = var.github_oidc_provider_arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            # O wildcard (*) permite que qualquer repositório da organização fiap-dclt assuma a role
+            "token.actions.githubusercontent.com:sub" = "repo:fiap-dclt/*"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_ecr_attach" {
+  role       = aws_iam_role.github_actions_ecr.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+}

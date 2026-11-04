@@ -44,7 +44,7 @@ resource "aws_elasticache_cluster" "redis" {
 }
 
 resource "aws_ssm_parameter" "redis_url" {
-  name  = "/${var.project}/${var.env}/${var.microservice}/REDIS_URL"
+  name  = "/${var.microservice}/${var.env}/REDIS_URL"
   type  = "String"
   value = "${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.port}"
 }

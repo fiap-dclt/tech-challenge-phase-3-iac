@@ -14,7 +14,7 @@ resource "aws_dynamodb_table" "this" {
 }
 
 resource "aws_ssm_parameter" "dynamodb_table" {
-  name  = "/${var.project}/${var.env}/dynamodb/AWS_DYNAMODB_TABLE"
+  name  = "/${var.table_name}/${var.env}/dynamodb/AWS_DYNAMODB_TABLE"
   type  = "String"
   value = aws_dynamodb_table.this.name
 }

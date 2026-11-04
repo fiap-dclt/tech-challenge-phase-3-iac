@@ -47,7 +47,8 @@ module "eks" {
 }
 
 module "eso" {
-  source = "../eso"
+  source                        = "../eso"
+  external_secrets_iam_role_arn = module.irsa.external_secrets_iam_role_arn
 }
 
 module "argocd" {

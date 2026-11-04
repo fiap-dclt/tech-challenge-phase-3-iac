@@ -161,7 +161,7 @@ resource "aws_iam_role" "github_actions_ecr" {
           }
           StringLike = {
             # O wildcard (*) permite que qualquer repositório da organização fiap-dclt assuma a role
-            "token.actions.githubusercontent.com:sub" = "repo:fiap-dclt/*"
+            "token.actions.githubusercontent.com:sub" = "repo:fiap-dclt*"
           }
         }
       }

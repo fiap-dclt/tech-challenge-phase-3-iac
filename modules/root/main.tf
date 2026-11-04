@@ -55,7 +55,7 @@ module "argocd" {
 }
 
 module "nginx_ingress" {
-  source = "../nginx-ingress"
+  source = "../nginx"
 }
 
 module "rds_auth" {

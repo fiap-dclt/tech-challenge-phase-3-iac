@@ -7,6 +7,8 @@ module "eks" {
   vpc_id             = var.vpc_id
 
   enable_cluster_creator_admin_permissions = true
+  endpoint_public_access                   = true
+  endpoint_private_access                  = true
 
   compute_config = {
     enabled    = true

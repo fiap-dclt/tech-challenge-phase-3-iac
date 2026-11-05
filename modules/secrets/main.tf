@@ -1,8 +1,8 @@
 resource "aws_secretsmanager_secret" "this" {
-  name                    = "secret-${var.env}-${var.secret_name}"
+  name                    = "${var.env}-${var.secret_name}-secret"
   recovery_window_in_days = 0
   tags = {
-    Name = "secret-${var.env}-${var.secret_name}"
+    Name = "${var.env}-${var.secret_name}-secret"
   }
 }
 

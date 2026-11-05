@@ -18,7 +18,7 @@ variable "project" {
   type = string
 }
 
-variable "rds_secret_arns" {
+variable "secrets_arns" {
   type = list(string)
 }
 
@@ -32,5 +32,5 @@ variable "kms_key_arn" {
 
 variable "github_oidc_provider_arn" {
   type    = string
-  default = "arn:aws:kms:us-east-1:640494160208:key/f6aeb90f-f501-4286-82f9-0e2df0cd7ca8"
+  default = "arn:aws:iam::640494160208:oidc-provider/token.actions.githubusercontent.com"
 }

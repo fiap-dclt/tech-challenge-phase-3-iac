@@ -42,7 +42,7 @@ inputs = {
   microservice = "evaluation-service"
   
   # Secrets Manager
-  secret_name = "toggle-master/prod/master_key"
+  secret_name = "master-key"
   secret_value = local.secret_vars.MASTER_KEY
 
   # ECR

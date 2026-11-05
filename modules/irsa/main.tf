@@ -53,7 +53,7 @@ resource "aws_iam_policy" "external_secrets_policy" {
           "secretsmanager:GetSecretValue",
           "secretsmanager:DescribeSecret"
         ]
-        Resource = var.rds_secret_arns
+        Resource = var.secrets_arns
       },
       {
         Effect = "Allow"

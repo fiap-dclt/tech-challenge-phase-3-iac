@@ -30,10 +30,10 @@ module "eks" {
 
   eks_managed_node_groups = {
     default = {
-      desired_size   = 2
-      min_size       = 1
-      max_size       = 3
-      instance_types = ["t3.small"]
+      desired_size   = 4
+      min_size       = 2
+      max_size       = 8
+      instance_types = ["t3.medium"]
 
       iam_role_additional_policies = {
         amazon_eks_worker_node_policy    = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"

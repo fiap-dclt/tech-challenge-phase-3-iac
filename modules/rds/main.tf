@@ -11,10 +11,13 @@ resource "aws_security_group" "rds_sg" {
   vpc_id = var.vpc_id
 
   ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [var.node_security_group_id]
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
+    security_groups = [
+      var.node_security_group_id,
+      var.cluster_primary_security_group_id
+    ]
   }
 
   egress {
@@ -31,20 +34,13 @@ resource "aws_security_group" "rds_sg" {
 resource "random_password" "db_pass" {
   length           = 20
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = "-_*"
 }
 
-resource "aws_secretsmanager_secret" "db_secret" {
-  name = "rds-${var.env}-${var.microservice}-secret"
-}
-
-resource "aws_secretsmanager_secret_version" "db_secret_version" {
-  secret_id = aws_secretsmanager_secret.db_secret.id
-  secret_string = jsonencode({
-    username     = var.db_user
-    password     = random_password.db_pass.result
-    database_url = "postgres://${var.db_user}:${random_password.db_pass.result}@${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}/auth_db"
-  })
+resource "aws_ssm_parameter" "db_url" {
+  name  = "/${var.microservice}/${var.env}/DATABASE_URL"
+  type  = "String"
+  value = "postgres://${var.db_user}:${random_password.db_pass.result}@${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}/${var.db_name}"
 }
 
 resource "aws_db_instance" "postgres" {
@@ -64,8 +60,3 @@ resource "aws_db_instance" "postgres" {
   }
 }
 
-resource "aws_ssm_parameter" "db_url" {
-  name  = "/${var.microservice}/${var.env}/DATABASE_URL"
-  type  = "String"
-  value = "${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}"
-}

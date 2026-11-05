@@ -60,42 +60,48 @@ module "nginx_ingress" {
 }
 
 module "rds_auth" {
-  source                 = "../rds"
-  env                    = var.env
-  vpc_id                 = module.vpc.vpc_id
-  private_subnet_ids     = module.vpc.private_subnet_ids
-  node_security_group_id = module.eks.node_security_group_id
-  project                = var.project
-  microservice           = "auth-service"
-  db_engine              = var.db_engine
-  db_engine_version      = var.db_engine_version
-  db_user                = var.db_user
+  source                            = "../rds"
+  env                               = var.env
+  vpc_id                            = module.vpc.vpc_id
+  private_subnet_ids                = module.vpc.private_subnet_ids
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  node_security_group_id            = module.eks.node_security_group_id
+  project                           = var.project
+  microservice                      = "auth-service"
+  db_engine                         = var.db_engine
+  db_engine_version                 = var.db_engine_version
+  db_user                           = var.db_user
+  db_name                           = "auth_db"
 }
 
 module "rds_flag" {
-  source                 = "../rds"
-  env                    = var.env
-  vpc_id                 = module.vpc.vpc_id
-  private_subnet_ids     = module.vpc.private_subnet_ids
-  node_security_group_id = module.eks.node_security_group_id
-  project                = var.project
-  microservice           = "flag-service"
-  db_engine              = var.db_engine
-  db_engine_version      = var.db_engine_version
-  db_user                = var.db_user
+  source                            = "../rds"
+  env                               = var.env
+  vpc_id                            = module.vpc.vpc_id
+  private_subnet_ids                = module.vpc.private_subnet_ids
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  node_security_group_id            = module.eks.node_security_group_id
+  project                           = var.project
+  microservice                      = "flag-service"
+  db_engine                         = var.db_engine
+  db_engine_version                 = var.db_engine_version
+  db_user                           = var.db_user
+  db_name                           = "flag_db"
 }
 
 module "rds_targeting" {
-  source                 = "../rds"
-  env                    = var.env
-  vpc_id                 = module.vpc.vpc_id
-  private_subnet_ids     = module.vpc.private_subnet_ids
-  node_security_group_id = module.eks.node_security_group_id
-  project                = var.project
-  microservice           = "targeting-service"
-  db_engine              = var.db_engine
-  db_engine_version      = var.db_engine_version
-  db_user                = var.db_user
+  source                            = "../rds"
+  env                               = var.env
+  vpc_id                            = module.vpc.vpc_id
+  private_subnet_ids                = module.vpc.private_subnet_ids
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  node_security_group_id            = module.eks.node_security_group_id
+  project                           = var.project
+  microservice                      = "targeting-service"
+  db_engine                         = var.db_engine
+  db_engine_version                 = var.db_engine_version
+  db_user                           = var.db_user
+  db_name                           = "targeting_db"
 }
 
 module "redis" {
@@ -115,10 +121,8 @@ module "irsa" {
   dynamodb_table_arn    = module.dynamodb.table_arn
   sqs_queue_arn         = module.sqs.queue_arn
   project               = var.project
-  rds_secret_arns = [
-    module.rds_auth.db_secret_arn,
-    module.rds_flag.db_secret_arn,
-    module.rds_targeting.db_secret_arn
+  secrets_arns = [
+    module.secrets.secret_arn
   ]
   ssm_parameter_arns = [
     module.rds_auth.db_url_ssm_arn,

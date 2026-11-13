@@ -13,3 +13,6 @@
 
 # Sensitive files that may contain secrets or credentials
 secrets.yaml
+
+# Temporarly ignore .github
+.github/

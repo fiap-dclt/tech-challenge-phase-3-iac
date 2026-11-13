@@ -33,7 +33,7 @@ inputs = {
   
   # DynamoDB
   table_name = "toggle-master-analytics-service"
-  hash_key   = "id"
+  hash_key   = "event_id"
   
   # SQS
   queue_name = "analytics-service-queue"

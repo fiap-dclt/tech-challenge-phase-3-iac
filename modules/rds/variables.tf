@@ -14,9 +14,9 @@ variable "cluster_primary_security_group_id" {
   type = string
 }
 
-variable "node_security_group_id" {
-  type = string
-}
+# variable "node_security_group_id" {
+#   type = string
+# }
 
 variable "project" {
   type = string

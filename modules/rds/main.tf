@@ -15,7 +15,7 @@ resource "aws_security_group" "rds_sg" {
     to_port   = 5432
     protocol  = "tcp"
     security_groups = [
-      var.node_security_group_id,
+      # var.node_security_group_id,
       var.cluster_primary_security_group_id
     ]
   }

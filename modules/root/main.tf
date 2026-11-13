@@ -65,13 +65,13 @@ module "rds_auth" {
   vpc_id                            = module.vpc.vpc_id
   private_subnet_ids                = module.vpc.private_subnet_ids
   cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
-  node_security_group_id            = module.eks.node_security_group_id
-  project                           = var.project
-  microservice                      = "auth-service"
-  db_engine                         = var.db_engine
-  db_engine_version                 = var.db_engine_version
-  db_user                           = var.db_user
-  db_name                           = "auth_db"
+  # node_security_group_id            = module.eks.node_security_group_id
+  project           = var.project
+  microservice      = "auth-service"
+  db_engine         = var.db_engine
+  db_engine_version = var.db_engine_version
+  db_user           = var.db_user
+  db_name           = "auth_db"
 }
 
 module "rds_flag" {
@@ -80,13 +80,13 @@ module "rds_flag" {
   vpc_id                            = module.vpc.vpc_id
   private_subnet_ids                = module.vpc.private_subnet_ids
   cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
-  node_security_group_id            = module.eks.node_security_group_id
-  project                           = var.project
-  microservice                      = "flag-service"
-  db_engine                         = var.db_engine
-  db_engine_version                 = var.db_engine_version
-  db_user                           = var.db_user
-  db_name                           = "flag_db"
+  # node_security_group_id            = module.eks.node_security_group_id
+  project           = var.project
+  microservice      = "flag-service"
+  db_engine         = var.db_engine
+  db_engine_version = var.db_engine_version
+  db_user           = var.db_user
+  db_name           = "flag_db"
 }
 
 module "rds_targeting" {
@@ -95,23 +95,24 @@ module "rds_targeting" {
   vpc_id                            = module.vpc.vpc_id
   private_subnet_ids                = module.vpc.private_subnet_ids
   cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
-  node_security_group_id            = module.eks.node_security_group_id
-  project                           = var.project
-  microservice                      = "targeting-service"
-  db_engine                         = var.db_engine
-  db_engine_version                 = var.db_engine_version
-  db_user                           = var.db_user
-  db_name                           = "targeting_db"
+  # node_security_group_id            = module.eks.node_security_group_id
+  project           = var.project
+  microservice      = "targeting-service"
+  db_engine         = var.db_engine
+  db_engine_version = var.db_engine_version
+  db_user           = var.db_user
+  db_name           = "targeting_db"
 }
 
 module "redis" {
-  source                 = "../redis"
-  env                    = var.env
-  vpc_id                 = module.vpc.vpc_id
-  private_subnet_ids     = module.vpc.private_subnet_ids
-  node_security_group_id = module.eks.node_security_group_id
-  project                = var.project
-  microservice           = var.microservice
+  source                            = "../redis"
+  env                               = var.env
+  vpc_id                            = module.vpc.vpc_id
+  private_subnet_ids                = module.vpc.private_subnet_ids
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  # node_security_group_id = module.eks.node_security_group_id
+  project      = var.project
+  microservice = var.microservice
 }
 
 module "irsa" {

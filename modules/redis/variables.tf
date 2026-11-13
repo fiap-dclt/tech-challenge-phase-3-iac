@@ -10,9 +10,13 @@ variable "private_subnet_ids" {
   type = list(string)
 }
 
-variable "node_security_group_id" {
+variable "cluster_primary_security_group_id" {
   type = string
 }
+
+# variable "node_security_group_id" {
+#   type = string
+# }
 
 variable "microservice" {
   type = string

@@ -41,6 +41,51 @@ module "irsa_analytics" {
   }
 }
 
+resource "aws_iam_policy" "evaluation_policy" {
+  name        = "irsa-policy-evaluation-service-${var.env}"
+  description = "Permite ao Evaluation Service enviar eventos ao SQS"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:SendMessage"
+        ]
+        Resource = var.sqs_queue_arn
+      }
+    ]
+  })
+
+  tags = {
+    Name = "irsa-policy-evaluation-service-${var.env}"
+  }
+}
+
+module "irsa_evaluation" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.8"
+
+  name            = "irsa-evaluation-${var.env}"
+  use_name_prefix = false
+
+  oidc_providers = {
+    main = {
+      provider_arn = var.eks_oidc_provider_arn
+
+      namespace_service_accounts = [
+        "evaluation:evaluation-service-account"
+      ]
+    }
+  }
+
+  policies = {
+    policy = aws_iam_policy.evaluation_policy.arn
+  }
+}
+
 resource "aws_iam_policy" "external_secrets_policy" {
   name        = "irsa-policy-external-secrets-${var.env}"
   description = "Permissoes para o External Secrets ler senhas do RDS e descriptografar com KMS"

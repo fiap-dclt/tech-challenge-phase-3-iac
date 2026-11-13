@@ -38,8 +38,12 @@ output "dynamodb_table_arn" {
   value = module.dynamodb.table_arn
 }
 
-output "irsa_role_arn" {
+output "irsa_analytics_role_arn" {
   value = module.irsa.analytics_iam_role_arn
+}
+
+output "irsa_evaluation_role_arn" {
+  value = module.irsa.evaluation_iam_role_arn
 }
 
 output "eks_cluster_name" {

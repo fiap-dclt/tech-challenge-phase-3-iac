@@ -25,7 +25,8 @@ module "irsa_analytics" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "~> 6.8"
 
-  name = "irsa-analytics-${var.env}"
+  name            = "irsa-analytics-${var.env}"
+  use_name_prefix = false
 
   oidc_providers = {
     main = {

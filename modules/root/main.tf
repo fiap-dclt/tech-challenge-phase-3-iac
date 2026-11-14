@@ -131,7 +131,8 @@ module "irsa" {
     module.rds_targeting.db_url_ssm_arn,
     module.redis.redis_url_ssm_arn,
     module.sqs.sqs_url_ssm_arn,
-    module.dynamodb.dynamodb_table_ssm_arn
+    module.dynamodb.dynamodb_table_ssm_arn,
+    "arn:aws:ssm:us-east-1:640494160208:parameter/toggle-master/prod/datadog/api-key"
   ]
   kms_key_arn              = var.kms_key_arn
   github_oidc_provider_arn = module.oidc.github_oidc_provider_arn

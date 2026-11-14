@@ -72,6 +72,7 @@ module "rds_auth" {
   db_engine_version = var.db_engine_version
   db_user           = var.db_user
   db_name           = "auth_db"
+  kms_key_arn       = var.kms_key_arn
 }
 
 module "rds_flag" {
@@ -87,6 +88,7 @@ module "rds_flag" {
   db_engine_version = var.db_engine_version
   db_user           = var.db_user
   db_name           = "flag_db"
+  kms_key_arn       = var.kms_key_arn
 }
 
 module "rds_targeting" {
@@ -102,6 +104,7 @@ module "rds_targeting" {
   db_engine_version = var.db_engine_version
   db_user           = var.db_user
   db_name           = "targeting_db"
+  kms_key_arn       = var.kms_key_arn
 }
 
 module "redis" {

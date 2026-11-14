@@ -41,3 +41,7 @@ variable "db_user" {
 variable "db_name" {
   type = string
 }
+
+variable "kms_key_arn" {
+  type = string
+}

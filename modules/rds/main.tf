@@ -38,9 +38,10 @@ resource "random_password" "db_pass" {
 }
 
 resource "aws_ssm_parameter" "db_url" {
-  name  = "/${var.microservice}/${var.env}/DATABASE_URL"
-  type  = "String"
-  value = "postgres://${var.db_user}:${random_password.db_pass.result}@${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}/${var.db_name}"
+  name   = "/${var.microservice}/${var.env}/DATABASE_URL"
+  type   = "SecureString"
+  key_id = var.kms_key_arn
+  value  = "postgres://${var.db_user}:${random_password.db_pass.result}@${aws_db_instance.postgres.address}:${aws_db_instance.postgres.port}/${var.db_name}"
 }
 
 resource "aws_db_instance" "postgres" {

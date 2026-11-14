@@ -4,9 +4,19 @@ resource "helm_release" "argocd" {
   chart            = "argo-cd"
   namespace        = "argocd"
   create_namespace = true
-  version          = "5.51.6" # Versão estável recomendada
-  set {
-    name  = "server.insecure"
-    value = "true"
-  }
+  version          = "10.18.0"
+
+  wait    = true
+  atomic  = true
+  timeout = 1200
+
+  values = [
+    yamlencode({
+      global = {
+        networkPolicy = {
+          create = false
+        }
+      }
+    })
+  ]
 }
